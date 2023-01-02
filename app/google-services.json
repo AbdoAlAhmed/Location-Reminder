@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "825707704286",
+    "project_id": "project4-70b96",
+    "storage_bucket": "project4-70b96.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:825707704286:android:53d9c514fd6f117688b74f",
+        "android_client_info": {
+          "package_name": "com.udacity.project4"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "825707704286-hsfabe6rcbjokk5j786hm3sdjvp3v29i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDvvn1f6DISdDOOPlgK_ihaO8eQL8_gNy0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "825707704286-hsfabe6rcbjokk5j786hm3sdjvp3v29i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
