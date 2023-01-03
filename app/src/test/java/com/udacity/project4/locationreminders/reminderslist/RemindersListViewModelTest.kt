@@ -4,12 +4,18 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.udacity.project4.locationreminders.data.FakeDataSource
+import com.udacity.project4.locationreminders.savereminder.CoroutineRule
+import com.udacity.project4.locationreminders.savereminder.getOrAwaitValue
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.*
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TestWatcher
+import org.junit.runner.Description
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
@@ -46,7 +52,7 @@ class RemindersListViewModelTest {
     }
 
     @Test
-    fun loadReminders_showNoData() = coroutineRule.runBlockingTest {
+    fun loadReminders_showNoData() = runBlockingTest {
         fakeRepo.shouldReturnError = true
         remindersListViewModel.loadReminders()
         MatcherAssert.assertThat(
@@ -55,4 +61,14 @@ class RemindersListViewModelTest {
     }
 
 
+    @Test
+    fun loadReminders_showData() = runBlockingTest {
+        fakeRepo.shouldReturnError = false
+        remindersListViewModel.loadReminders()
+        MatcherAssert.assertThat(
+            remindersListViewModel.remindersList.getOrAwaitValue().size, CoreMatchers.`is`(3)
+        )
+    }
+
 }
+

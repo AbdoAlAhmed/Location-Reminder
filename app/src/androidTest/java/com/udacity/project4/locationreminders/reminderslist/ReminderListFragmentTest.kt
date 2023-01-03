@@ -25,7 +25,44 @@ import org.mockito.Mockito.verify
 @MediumTest
 class ReminderListFragmentTest {
 
-//    TODO: test the navigation of the fragments.
-//    TODO: test the displayed data on the UI.
-//    TODO: add testing for the error messages.
+    @Test
+    fun clickAddReminderButton_navigateToAddReminderFragment() {
+        // GIVEN - On the home screen
+        val scenario = launchFragmentInContainer<ReminderListFragment>(Bundle(), R.style.AppTheme)
+        val navController = mock(NavController::class.java)
+        scenario.onFragment { fragment ->
+            Navigation.setViewNavController(fragment.requireView(), navController)
+        }
+
+        // WHEN - Click on the "+" button
+        onView(withId(R.id.addReminderFAB)).perform(click())
+
+        // THEN - Verify that we navigate to the add screen
+        verify(navController).navigate(
+            ReminderListFragmentDirections.toSaveReminder()
+        )
+    }
+
+    @Test
+    fun reminderListFragment_displayedInUi() {
+        // GIVEN - On the home screen
+        val scenario = launchFragmentInContainer<ReminderListFragment>(Bundle(), R.style.AppTheme)
+        val navController = mock(NavController::class.java)
+        scenario.onFragment { fragment ->
+            Navigation.setViewNavController(fragment.requireView(), navController)
+        }
+
+        // WHEN - Click on the "+" button
+        onView(withId(R.id.addReminderFAB)).perform(click())
+
+        // THEN - Verify that we navigate to the add screen
+        verify(navController).navigate(
+            ReminderListFragmentDirections.toSaveReminder()
+        )
+    }
+
+
+
+
+
 }
