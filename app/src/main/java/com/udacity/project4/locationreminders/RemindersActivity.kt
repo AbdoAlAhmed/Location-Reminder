@@ -27,30 +27,31 @@ class RemindersActivity : AppCompatActivity() {
 
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        return super.onCreateOptionsMenu(menu)
-        menuInflater.inflate(R.menu.main_menu, menu)
-    }
+//    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+//        return super.onCreateOptionsMenu(menu)
+//        menuInflater.inflate(R.menu.main_menu, menu)
+//    }
+//
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        return when (item.itemId) {
+//            R.id.logout -> {
+//                authUI.signOut(this)
+//                startActivity(Intent(this, AuthenticationActivity::class.java))
+//                finish()
+//                true
+//            }
+//            else -> super.onOptionsItemSelected(item)
+//        }
+//    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.logout -> {
+        when (item.itemId) {
+            android.R.id.home -> {
                 authUI.signOut(this)
-                startActivity(Intent(this, AuthenticationActivity::class.java))
-                true
+                (nav_host_fragment as NavHostFragment).navController.popBackStack()
+                return true
             }
-            else -> super.onOptionsItemSelected(item)
         }
+        return super.onOptionsItemSelected(item)
     }
-
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        when (item.itemId) {
-//            android.R.id.home -> {
-//                authUI.signOut(this)
-//                (nav_host_fragment as NavHostFragment).navController.popBackStack()
-//                return true
-//            }
-//        }
-//        return super.onOptionsItemSelected(item)
-//    }
 }

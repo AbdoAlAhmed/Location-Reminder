@@ -2,7 +2,7 @@
     <string name="app_name">Location Reminders</string>
     <string name="error_happened">Error happened</string>
     <string name="retry">Retry</string>
-    <string name="no_data">No Data</string>
+    <string name="no_data">No Data Or Missing Data</string>
     <string name="reminder_title">Reminder Title</string>
     <string name="reminder_desc">Description</string>
     <string name="reminder_location">Reminder Location</string>
@@ -34,6 +34,7 @@
     <string name="err_enter_title">Please enter title</string>
     <string name="err_select_location">Please select location</string>
 
+
     <!-- Error strings -->
     <string name="geofence_unknown_error">Unknown error: the Geofence service is not available now.</string>
     <string name="geofence_not_available">Geofence service is not available now. Go to Settings>Location>Mode and choose High accuracy.</string>
@@ -44,4 +45,5 @@
     <string name="sign_in">Sign In</string>
     <string name="email">Email</string>
     <string name="google_login">Google Login</string>
+    <string name="google">google</string>
 </resources>

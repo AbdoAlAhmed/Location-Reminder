@@ -47,35 +47,45 @@ class AuthenticationActivity : AppCompatActivity() {
         }
 
         with(binding) {
-            email_button.setOnClickListener {
+            login.setOnClickListener {
                 createAnAccount()
             }
 
-            google_button.setOnClickListener {
+            register.setOnClickListener {
                 createAnAccount()
             }
         }
 
 
-//         TODO: Implement the create account and sign in using FirebaseUI, use sign in using email and sign in using Google
-//          TODO: If the user was authenticated, send him to RemindersActivity
-//          TODO: a bonus is to customize the sign in flow to look nice using :
+//         DONE: Implement the create account and sign in using FirebaseUI, use sign in using email and sign in using Google
+//          DONE: If the user was authenticated, send him to RemindersActivity
+//          DONE: a bonus is to customize the sign in flow to look nice using :
         //https://github.com/firebase/FirebaseUI-Android/blob/master/auth/README.md#custom-layout
 
     }
 
     private fun createAnAccount() {
+        // Choose authentication providers
         val providers = arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().build(),
             AuthUI.IdpConfig.GoogleBuilder().build()
         )
+        // custom layout
         val customLayout = AuthMethodPickerLayout
             .Builder(R.layout.activity_authentication)
-            .setGoogleButtonId(R.id.google_button)
-            .setEmailButtonId(R.id.email_button)
+            .setGoogleButtonId(R.id.google)
+            .setEmailButtonId(R.id.email)
             .build()
 
-
+        // Create and launch sign-in intent
+//        startActivityForResult(
+//            AuthUI.getInstance()
+//                .createSignInIntentBuilder()
+//                .setAvailableProviders(providers)
+//                .setAuthMethodPickerLayout(customLayout)
+//                .build(),
+//            REQUEST_CODE_SIGN_IN
+//        )
         val singIn = AuthUI.getInstance()
             .createSignInIntentBuilder()
             .setAvailableProviders(providers)
