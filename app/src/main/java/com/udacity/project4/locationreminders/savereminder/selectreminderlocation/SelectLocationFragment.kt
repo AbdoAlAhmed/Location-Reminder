@@ -5,10 +5,12 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.content.res.Resources
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.google.android.gms.location.*
@@ -50,18 +52,10 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         setHasOptionsMenu(true)
         setDisplayHomeAsUpEnabled(true)
 
-
-//        TODO: zoom to the user location after taking his permission
 //        1) Ask for permission
         checkPermissions()
 //        2) zoom to the user location
-
-//        TODO: add style to the mapGoogle
-//        TODO: put a marker to location that the user selected
-
-
-//        TODO: call this function after the user confirms on the selected location
-        // click on the "Save" button
+         // click on the "Save" button
         binding.saveLocationBtn.setOnClickListener {
             onLocationSelected()
         }
@@ -70,10 +64,17 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
     }
 
     private fun onLocationSelected() {
+        // when the user save an empty POI
+        try {
         _viewModel.savePOI(pointOfInterest)
         _viewModel.reminderSelectedLocationStr.value = pointOfInterest.name
         _viewModel.navigationCommand.value = NavigationCommand.Back
+        }catch (e: Exception){
+            _viewModel.showErrorMessage.value = "Please select a location"
+            Log.e("", "someThing Wrong: ${e.message}")
+        }
     }
+
 
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -104,10 +105,30 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         mapGoogle = map ?: return
         setMapStyle(map)
         enableMyLocation()
+        zoomToUserLocation()
         setPoiClick(map)
         setMapLongClick(map)
     }
 
+
+    @SuppressLint("MissingPermission")
+    private fun zoomToUserLocation() {
+        if (isPermissionGranted()) {
+            mapGoogle.isMyLocationEnabled = true
+            val locationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+            locationClient.lastLocation.addOnSuccessListener { location ->
+                if (location != null) {
+                    val latLng = LatLng(location.latitude, location.longitude)
+                    val update = CameraUpdateFactory.newLatLngZoom(latLng, 18f)
+                    mapGoogle.moveCamera(update)
+                }
+            }
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                requestPermissions()
+            }
+        }
+    }
     // set poi and save it
     private fun setPoiClick(map: GoogleMap) {
         map.setOnPoiClickListener { poi ->
@@ -188,7 +209,9 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         if (isPermissionGranted()) {
             Toast.makeText(context, "Permission granted", Toast.LENGTH_SHORT).show()
         } else {
-            requestPermissions()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                requestPermissions()
+            }
             Toast.makeText(context, "Permission not granted", Toast.LENGTH_SHORT).show()
         }
     }
@@ -200,11 +223,14 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         ) == PackageManager.PERMISSION_GRANTED
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     private fun requestPermissions() {
-        requestPermissions(
-            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-            REQUEST_FOREGROUND_AND_BACKGROUND_PERMISSION_RESULT_CODE
-        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            requestPermissions(
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION),
+                REQUEST_FOREGROUND_AND_BACKGROUND_PERMISSION_RESULT_CODE
+            )
+        }
     }
 
     override fun onRequestPermissionsResult(

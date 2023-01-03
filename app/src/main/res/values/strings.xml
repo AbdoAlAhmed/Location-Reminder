@@ -2,7 +2,7 @@
     <string name="app_name">Location Reminders</string>
     <string name="error_happened">Error happened</string>
     <string name="retry">Retry</string>
-    <string name="no_data">No Data Or Missing Data</string>
+    <string name="no_data">No Data </string>
     <string name="reminder_title">Reminder Title</string>
     <string name="reminder_desc">Description</string>
     <string name="reminder_location">Reminder Location</string>
