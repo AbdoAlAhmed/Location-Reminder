@@ -70,7 +70,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         _viewModel.reminderSelectedLocationStr.value = pointOfInterest.name
         _viewModel.navigationCommand.value = NavigationCommand.Back
         }catch (e: Exception){
-            _viewModel.showErrorMessage.value = "Please select a location"
+            Toast.makeText(context, "Please select a location", Toast.LENGTH_SHORT).show()
             Log.e("", "someThing Wrong: ${e.message}")
         }
     }
@@ -101,18 +101,18 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
         else -> super.onOptionsItemSelected(item)
     }
 
-    override fun onMapReady(map: GoogleMap?) {
-        mapGoogle = map ?: return
+    override fun onMapReady(map: GoogleMap) {
+        mapGoogle = map
         setMapStyle(map)
         enableMyLocation()
-        zoomToUserLocation()
+        zoomToUserLocationAndSetMark(map)
         setPoiClick(map)
         setMapLongClick(map)
     }
 
 
     @SuppressLint("MissingPermission")
-    private fun zoomToUserLocation() {
+    private fun zoomToUserLocationAndSetMark(map: GoogleMap) {
         if (isPermissionGranted()) {
             mapGoogle.isMyLocationEnabled = true
             val locationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
@@ -120,9 +120,23 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
                 if (location != null) {
                     val latLng = LatLng(location.latitude, location.longitude)
                     val update = CameraUpdateFactory.newLatLngZoom(latLng, 18f)
-                    mapGoogle.moveCamera(update)
+                    map.moveCamera(update)
                 }
+                map.addMarker(
+                    MarkerOptions()
+                        .position(LatLng(location.latitude, location.longitude))
+                        .title("You are here")
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                )
+                _viewModel.savePOI(
+                    PointOfInterest(
+                        LatLng(location.latitude, location.longitude),
+                        "You are here",
+                        "You are here"
+                    )
+                )
             }
+
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 requestPermissions()
@@ -167,7 +181,7 @@ class SelectLocationFragment : BaseFragment(), OnMapReadyCallback {
                     .position(latLng)
                     .title(getString(R.string.dropped_pin))
                     .snippet(snippet)
-                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
             )
             pointOfInterest = PointOfInterest(latLng, UUID.randomUUID().toString(), snippet)
             _viewModel.savePOI(pointOfInterest)
