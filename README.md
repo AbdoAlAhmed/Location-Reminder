@@ -1,1 +1,3 @@
-# project 4
+# Location Reminder
+"I developed an Android application called "Location Reminder" which utilizes Firebase, Google Maps and Geofence to provide users with a convenient way to set reminders based on their location. This project showcases my proficiency in developing location-based services, integrating with Firebase and Google Maps and delivering high-quality, robust, and user-friendly mobile applications that provide value to users."
+You can use this description as the summary of your project on GitHub. It's a brief and concise explanation of what the project is all about, and the main feature and technologies used in the project.
